@@ -242,6 +242,44 @@ Aplikasi web berbasis Laravel untuk sistem penjualan obat dengan fitur CRUD leng
 - **Laporan**: Report comprehensive
 - **Settings**: Konfigurasi sistem
 
+##### 7.4.1 Struktur Sidebar Admin
+Sidebar admin dirancang dengan pengelompokan menu yang logis dan user-friendly:
+
+**DASHBOARD**
+- Dashboard Overview (halaman utama dengan statistik dan grafik)
+
+**INVENTORY MANAGEMENT**
+- Drug Management (CRUD obat - tambah, edit, hapus obat)
+- Stock Levels (monitoring stok obat real-time)
+- Expiry Alerts (peringatan obat kadaluarsa)
+
+**TRANSACTION MANAGEMENT**
+- Sales Transactions (manajemen penjualan dan riwayat)
+- Purchase Orders (pembelian dari supplier)
+- Online Orders (pesanan dari pelanggan online)
+
+**USER MANAGEMENT**
+- Pharmacists (CRUD data apoteker)
+- Customers (CRUD data pelanggan)
+- Suppliers (CRUD data supplier)
+
+**REPORTS & ANALYTICS**
+- Sales Reports (laporan penjualan)
+- Inventory Reports (laporan stok dan inventory)
+- Financial Reports (laporan keuangan)
+
+**ACCOUNT**
+- Profile Settings (pengaturan profil admin)
+- System Settings (konfigurasi sistem)
+- Help & Support (bantuan dan dukungan)
+
+**Keunggulan Struktur Sidebar:**
+- Pengelompokan logis berdasarkan fungsi bisnis
+- Menghindari duplikasi menu
+- Mudah dinavigasi dan dipahami
+- Scalable untuk penambahan fitur baru
+- Sesuai dengan best practices UI/UX
+
 ### 8. Fitur Khusus
 - **Search**: Pencarian obat berdasarkan nama atau kategori
 - **Filter**: Filter obat berdasarkan tanggal kadaluarsa

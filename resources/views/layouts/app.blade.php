@@ -28,6 +28,199 @@
     <!-- Page CSS -->
     @yield('styles')
     
+    <!-- Custom Sidebar CSS -->
+    <style>
+        /* Enhanced sidebar selected/active state - Modern style like in the image */
+        .menu-item.active > .menu-link {
+            background: #696cff !important;
+            color: #ffffff !important;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            margin: 0.125rem 0.75rem;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 6px 0 rgba(105, 108, 255, 0.4);
+            position: relative;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item.active > .menu-link .menu-icon {
+            color: #ffffff !important;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        
+        .menu-item.active > .menu-link .text-truncate {
+            color: #ffffff !important;
+            flex: 1;
+        }
+        
+        /* Sub-menu active state */
+        .menu-sub .menu-item.active > .menu-link {
+            background: rgba(105, 108, 255, 0.12) !important;
+            color: #696cff !important;
+            border-radius: 0.375rem;
+            margin: 0.125rem 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-weight: 500;
+            position: relative;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-sub .menu-item.active > .menu-link::before {
+            content: '';
+            position: absolute;
+            left: -0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0.25rem;
+            height: 1.25rem;
+            background: #696cff;
+            border-radius: 0 0.125rem 0.125rem 0;
+        }
+        
+        .menu-sub .menu-item.active > .menu-link .text-truncate {
+            color: #696cff !important;
+            flex: 1;
+        }
+        
+        /* Hover effects */
+        .menu-item:not(.active) > .menu-link:hover {
+            background: rgba(105, 108, 255, 0.08);
+            color: #696cff;
+            border-radius: 0.5rem;
+            margin: 0.125rem 0.75rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .menu-sub .menu-item:not(.active) > .menu-link:hover {
+            background: rgba(105, 108, 255, 0.06);
+            color: #696cff;
+            border-radius: 0.375rem;
+            margin: 0.125rem 0.5rem;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .menu-item:not(.active) > .menu-link:hover .menu-icon {
+            color: #696cff;
+        }
+        
+        /* Default menu link styling */
+        .menu-item > .menu-link {
+            margin: 0.125rem 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .menu-sub .menu-item > .menu-link {
+            margin: 0.125rem 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Icon spacing fix */
+        .menu-icon.icon-base {
+            font-size: 1.125rem;
+            width: 1.375rem;
+            height: 1.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        
+        /* Text container */
+        .menu-link .text-truncate {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Menu headers spacing */
+        .menu-header.mt-7 {
+            margin-top: 1.75rem !important;
+        }
+        
+        /* Menu toggle arrow for active items */
+        .menu-item.active.open > .menu-link .menu-toggle::after {
+            color: #ffffff !important;
+        }
+        
+        /* Ensure proper spacing for menu items */
+        .menu-inner {
+            padding: 0.5rem 0;
+        }
+        
+        /* Menu header styling */
+        .menu-header {
+            padding: 0.75rem 1.5rem 0.5rem;
+        }
+        
+        /* Responsive behavior for collapsed sidebar */
+        @media (max-width: 1199.98px) {
+            .layout-menu-collapsed .menu-link .text-truncate {
+                display: none;
+            }
+            
+            .layout-menu-collapsed .menu-icon.icon-base {
+                margin-right: 0;
+                justify-content: center;
+            }
+            
+            .layout-menu-collapsed .menu-header {
+                display: none;
+            }
+            
+            .layout-menu-collapsed .menu-item > .menu-link {
+                justify-content: center;
+                padding: 0.75rem;
+                margin: 0.125rem 0.5rem;
+            }
+            
+            .layout-menu-collapsed .menu-sub {
+                display: none;
+            }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 767.98px) {
+            .layout-menu {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            
+            .layout-menu.show {
+                transform: translateX(0);
+            }
+        }
+        
+        /* Ensure menu toggle works properly */
+        .layout-menu-toggle {
+            cursor: pointer;
+        }
+        
+        /* Fix for menu toggle icon alignment */
+        .layout-menu-toggle i {
+            transition: transform 0.3s ease;
+        }
+        
+        .layout-menu-collapsed .layout-menu-toggle i {
+            transform: rotate(180deg);
+        }
+    </style>
+    
     <!-- Helpers -->
     <script src="{{ asset('template-bootstrap/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('template-bootstrap/js/config.js') }}"></script>
@@ -67,41 +260,185 @@
                     <!-- Dashboard -->
                     <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <a href="{{ route('dashboard') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                            <div class="text-truncate" data-i18n="Analytics">Dashboard</div>
+                            <i class="menu-icon icon-base ri ri-home-smile-line"></i>
+                            <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
                         </a>
                     </li>
                     
-                    <!-- Menu Items -->
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Menu Utama</span>
+                    <!-- Inventory Management -->
+                    <li class="menu-header small text-uppercase mt-7">
+                        <span class="menu-header-text">Inventory Management</span>
+                    </li>
+                    
+                    <li class="menu-item {{ request()->routeIs('admin.obat.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base ri ri-capsule-line"></i>
+                            <div class="text-truncate" data-i18n="Drug Management">Drug Management</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('admin.obat.index') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="All Drugs">All Drugs</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.obat.create') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Add Drug">Add Drug</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="menu-item {{ request()->routeIs('admin.supplier.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base ri ri-building-2-line"></i>
+                            <div class="text-truncate" data-i18n="Supplier Management">Supplier Management</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('admin.supplier.index') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="All Suppliers">All Suppliers</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.supplier.create') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Add Supplier">Add Supplier</div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     
                     <li class="menu-item">
                         <a href="#" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-package"></i>
-                            <div class="text-truncate" data-i18n="Obat">Data Obat</div>
+                            <i class="menu-icon icon-base ri ri-alarm-warning-line"></i>
+                            <div class="text-truncate" data-i18n="Expiry Alerts">Expiry Alerts</div>
                         </a>
                     </li>
                     
                     <li class="menu-item">
                         <a href="#" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-user"></i>
-                            <div class="text-truncate" data-i18n="Pelanggan">Data Pelanggan</div>
+                            <i class="menu-icon icon-base ri ri-bar-chart-box-line"></i>
+                            <div class="text-truncate" data-i18n="Stock Levels">Stock Levels</div>
+                        </a>
+                    </li>
+                    
+                    <!-- Transaction Management -->
+                    <li class="menu-header small text-uppercase mt-7">
+                        <span class="menu-header-text">Transaction Management</span>
+                    </li>
+                    
+                    <li class="menu-item {{ request()->routeIs('admin.penjualan.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base ri ri-shopping-cart-line"></i>
+                            <div class="text-truncate" data-i18n="Sales Management">Sales Management</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('admin.penjualan.index') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="All Sales">All Sales</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.penjualan.create') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="New Sale">New Sale</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="menu-item {{ request()->routeIs('admin.pembelian.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base ri ri-shopping-bag-3-line"></i>
+                            <div class="text-truncate" data-i18n="Purchase Management">Purchase Management</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('admin.pembelian.index') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="All Purchases">All Purchases</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.pembelian.create') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="New Purchase">New Purchase</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- User Management -->
+                    <li class="menu-header small text-uppercase mt-7">
+                        <span class="menu-header-text">User Management</span>
+                    </li>
+                    
+                    <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base ri ri-group-line"></i>
+                            <div class="text-truncate" data-i18n="Users">Users</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="All Users">All Users</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.users.apoteker') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Pharmacists">Pharmacists</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.users.pelanggan') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Customers">Customers</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Reports & Analytics -->
+                    <li class="menu-header small text-uppercase mt-7">
+                        <span class="menu-header-text">Reports & Analytics</span>
+                    </li>
+                    
+                    <li class="menu-item {{ request()->routeIs('admin.reports.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base ri ri-bar-chart-2-line"></i>
+                            <div class="text-truncate" data-i18n="Reports">Reports</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('admin.reports.sales') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Sales Report">Sales Report</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.reports.inventory') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Inventory Report">Inventory Report</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.reports.financial') ? 'active' : '' }}">
+                                <a href="#" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Financial Report">Financial Report</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Account -->
+                    <li class="menu-header small text-uppercase mt-7">
+                        <span class="menu-header-text">Account</span>
+                    </li>
+                    
+                    <li class="menu-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                        <a href="#" class="menu-link">
+                            <i class="menu-icon icon-base ri ri-settings-3-line"></i>
+                            <div class="text-truncate" data-i18n="Profile Settings">Profile Settings</div>
                         </a>
                     </li>
                     
                     <li class="menu-item">
                         <a href="#" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-receipt"></i>
-                            <div class="text-truncate" data-i18n="Transaksi">Transaksi</div>
-                        </a>
-                    </li>
-                    
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
-                            <div class="text-truncate" data-i18n="Laporan">Laporan</div>
+                            <i class="menu-icon icon-base ri ri-customer-service-2-line"></i>
+                            <div class="text-truncate" data-i18n="Help & Support">Help & Support</div>
                         </a>
                     </li>
                 </ul>

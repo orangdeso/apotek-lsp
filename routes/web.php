@@ -7,8 +7,22 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Customer\TransactionController;
 use App\Http\Controllers\Customer\AddressController;
 
-// URL awal menampilkan dashboard customer (tanpa login)
-Route::get('/', [CustomerController::class, 'dashboard'])->name('home');
+// URL awal - redirect berdasarkan authentication status
+Route::get('/', function () {
+    if (Auth::check()) {
+        /** @var User $user */
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->isApoteker()) {
+            return redirect()->route('pharmacist.dashboard');
+        } else {
+            return redirect()->route('customer.dashboard');
+        }
+    }
+    // Jika belum login, tampilkan halaman customer (public)
+    return app(CustomerController::class)->dashboard();
+})->name('home');
 
 // Rute publik untuk customer (tanpa login)
 Route::prefix('customer')->name('customer.')->group(function () {
@@ -26,11 +40,11 @@ Route::middleware(['auth'])->group(function () {
         /** @var User $user */
         $user = Auth::user();
         if ($user->isAdmin()) {
-            return redirect()->route('dashboard.admin');
+            return redirect()->route('admin.dashboard');
         } elseif ($user->isApoteker()) {
-            return redirect()->route('dashboard.pharmacist');
+            return redirect()->route('pharmacist.dashboard');
         } else {
-            return redirect()->route('dashboard.customer');
+            return redirect()->route('customer.dashboard');
         }
     })->name('dashboard');
     
