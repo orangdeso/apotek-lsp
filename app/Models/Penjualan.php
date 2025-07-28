@@ -13,9 +13,12 @@ class Penjualan extends Model
     protected $primaryKey = 'id_penjualan';
 
     protected $fillable = [
-        'user_id',
+        'id_user',
         'total',
-        'status'
+        'status',
+        'payment_method',
+        'notes',
+        'address_id'
     ];
 
     protected $casts = [
@@ -25,7 +28,12 @@ class Penjualan extends Model
     // Relationships
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
     }
 
     public function penjualanDetails()
