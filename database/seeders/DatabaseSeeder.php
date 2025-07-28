@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'apoteker@apotek.com',
             'password' => Hash::make('apoteker123'),
             'alamat' => 'Jl. Apoteker No. 2',
-            'kota' => 'Jakarta',
+            'kota' => 'Bandung',
             'telpon' => '081234567891',
             'role' => 'apoteker'
         ]);
@@ -41,9 +41,15 @@ class DatabaseSeeder extends Seeder
             'email' => 'pelanggan@apotek.com',
             'password' => Hash::make('pelanggan123'),
             'alamat' => 'Jl. Pelanggan No. 3',
-            'kota' => 'Jakarta',
+            'kota' => 'Surabaya',
             'telpon' => '081234567892',
             'role' => 'pelanggan'
+        ]);
+
+        // Call other seeders
+        $this->call([
+            SupplierSeeder::class,
+            ObatSeeder::class,
         ]);
     }
 }

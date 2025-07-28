@@ -10,15 +10,15 @@ return new class extends Migration
     {
         Schema::create('penjualan', function (Blueprint $table) {
             $table->id('id_penjualan');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('id_user');
             $table->decimal('total', 12, 2);
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
             
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
         });
 
-        Schema::create('penjualan_details', function (Blueprint $table) {
+        Schema::create('penjualan_detail', function (Blueprint $table) {
             $table->unsignedBigInteger('id_penjualan');
             $table->unsignedBigInteger('id_obat');
             $table->integer('quantity');
