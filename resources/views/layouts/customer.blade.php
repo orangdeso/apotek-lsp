@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>@yield('title', 'LSP Apotek') - Online Pharmacy</title>
+    <title>@yield('title', 'LSP Apotek')</title>
     <meta name="description" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('template-bootstrap/img/favicon/favicon.ico') }}" />
@@ -38,15 +39,22 @@
             <!-- Layout container -->
             <div class="layout-page">
                 <!-- Navbar -->
-                <nav class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+                <nav class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme shadow-sm" id="layout-navbar">
                     <div class="container-fluid">
                         <!-- Brand -->
-                        <a class="navbar-brand" href="{{ route('dashboard') }}">
+                        <a class="navbar-brand">
                             <span class="text-primary fw-bold fs-4">LSP Apotek</span>
                         </a>
                         
                         <!-- Right side buttons -->
                         <div class="navbar-nav flex-row align-items-center ms-auto">
+                            @auth
+                                <!-- Cart Icon -->
+                                <a href="{{ route('customer.cart.view') }}" class="nav-link me-3 position-relative">
+                                    <i class="ri ri-shopping-cart-line icon-lg"></i>
+                                    <span class="badge bg-primary rounded-pill position-absolute top-0 start-100 translate-middle" id="cart-count">0</span>
+                                </a>
+                            @endauth
                             @guest
                                 <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">Sign In</a>
                                 <a href="{{ route('register') }}" class="btn btn-primary">Sign Up</a>
@@ -79,6 +87,12 @@
                                             <a class="dropdown-item" href="#">
                                                 <i class="icon-base ri ri-user-line icon-md me-3"></i>
                                                 <span>My Profile</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('customer.addresses.index') }}">
+                                                <i class="icon-base ri ri-map-pin-line icon-md me-3"></i>
+                                                <span>My Addresses</span>
                                             </a>
                                         </li>
                                         <li>

@@ -80,8 +80,8 @@
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <div class="card h-100 product-card">
                                 <div class="card-img-top position-relative">
-                                    @if($obat->gambar)
-                                        <img src="{{ asset('storage/' . $obat->gambar) }}" class="img-fluid" alt="{{ $obat->nama_obat }}" style="height: 200px; object-fit: cover;">
+                                    @if($obat->image)
+                                        <img src="{{ asset('storage/' . $obat->image) }}" class="img-fluid" alt="{{ $obat->name_obat }}" style="height: 200px; object-fit: cover;">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                                             <i class="bx bx-capsule text-muted" style="font-size: 3rem;"></i>
@@ -92,17 +92,17 @@
                                     @endif
                                 </div>
                                 <div class="card-body d-flex flex-column">
-                                    <h6 class="card-title">{{ $obat->nama_obat }}</h6>
-                                    <p class="text-muted small mb-2">{{ Str::limit($obat->deskripsi, 60) }}</p>
+                                    <h6 class="card-title">{{ $obat->name_obat }}</h6>
+                                    <p class="text-muted small mb-2">{{ Str::limit($obat->description, 60) }}</p>
                                     <div class="mt-auto">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <span class="text-primary fw-bold">Rp {{ number_format($obat->harga, 0, ',', '.') }}</span>
+                                            <span class="text-primary fw-bold">Rp {{ number_format($obat->sale_price, 0, ',', '.') }}</span>
                                             <small class="text-muted">Stock: {{ $obat->stok }}</small>
                                         </div>
                                         <div class="d-grid gap-2">
-                                            <a href="{{ route('customer.obat.show', $obat->id) }}" class="btn btn-outline-primary btn-sm">View Details</a>
+                                            <a href="{{ route('customer.obat.show', $obat->id_obat) }}" class="btn btn-outline-primary btn-sm">View Details</a>
                                             @if($obat->stok > 0)
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="addToCart({{ $obat->id }})">
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="addToCart({{ $obat->id_obat }})">
                                                     <i class="bx bx-cart-add me-1"></i>Add to Cart
                                                 </button>
                                             @else
@@ -153,36 +153,123 @@
 
 @section('scripts')
 <script>
+// Load cart count when page loads
+$(document).ready(function() {
+    @auth
+        updateCartCount();
+    @endauth
+});
 function addToCart(obatId) {
     @auth
-        // Add to cart logic here
-        fetch(`/customer/cart/add/${obatId}`, {
+        // Disable button and show loading state
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<i class="bx bx-loader-alt bx-spin me-1"></i>Adding...';
+        
+        $.ajax({
+            url: '{{ route("customer.cart.add", ":id") }}'.replace(':id', obatId),
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            data: {
+                quantity: 1,
+                _token: '{{ csrf_token() }}'
             },
-            body: JSON.stringify({
-                quantity: 1
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Show success message
-                alert('Product added to cart successfully!');
-            } else {
-                alert('Failed to add product to cart.');
+            success: function(response) {
+                if (response.success) {
+                    // Show success toast
+                    showToast('success', 'Product added to cart successfully!');
+                    
+                    // Update cart count
+                    updateCartCount();
+                } else {
+                    showToast('error', response.message || 'Failed to add product to cart.');
+                }
+            },
+            error: function(xhr) {
+                let errorMessage = 'An error occurred while adding to cart.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                showToast('error', errorMessage);
+            },
+            complete: function() {
+                // Re-enable button
+                button.disabled = false;
+                button.innerHTML = originalText;
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while adding to cart.');
         });
     @else
-        alert('Please sign in to add products to cart.');
-        window.location.href = '{{ route("login") }}';
+        showToast('warning', 'Please sign in to add products to cart.');
+        setTimeout(() => {
+            window.location.href = '{{ route("login") }}';
+        }, 1500);
     @endauth
+}
+
+function showToast(type, message) {
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.className = 'position-fixed end-0 p-3';
+        toastContainer.style.top = '80px'; // Position below header
+        toastContainer.style.zIndex = '1055';
+        document.body.appendChild(toastContainer);
+    }
+    
+    // Create toast element
+    const toastId = 'toast-' + Date.now();
+    const toastHtml = `
+        <div id="${toastId}" class="toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'warning'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Initialize and show toast
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement, {
+        autohide: true,
+        delay: 3000
+    });
+    
+    toast.show();
+    
+    // Remove toast element after it's hidden
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        toastElement.remove();
+    });
+}
+
+function updateCartCount() {
+    $.ajax({
+        url: '{{ route("customer.cart.count") }}',
+        method: 'GET',
+        success: function(response) {
+            if (response.success) {
+                // Update cart badge in navbar
+                const cartBadge = document.querySelector('#cart-count');
+                if (cartBadge) {
+                    cartBadge.textContent = response.count;
+                    if (response.count > 0) {
+                        cartBadge.style.display = 'inline';
+                    } else {
+                        cartBadge.style.display = 'none';
+                    }
+                }
+            }
+        },
+        error: function(xhr) {
+            console.error('Failed to update cart count:', xhr);
+        }
+    });
 }
 </script>
 @endsection
