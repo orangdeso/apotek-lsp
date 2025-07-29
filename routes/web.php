@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Customer\TransactionController;
 use App\Http\Controllers\Customer\AddressController;
+use App\Http\Controllers\ObatController;
 
 // URL awal - redirect berdasarkan authentication status
 Route::get('/', function () {
@@ -63,9 +64,22 @@ Route::middleware(['auth'])->group(function () {
             return view('admin.suppliers.index');
         })->name('suppliers.index');
         
+        // Drug Management Routes
+        Route::prefix('drugs')->name('drugs.')->group(function () {
+            Route::get('/', [ObatController::class, 'index'])->name('index');
+            Route::get('/create', [ObatController::class, 'create'])->name('create');
+            Route::post('/', [ObatController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [ObatController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [ObatController::class, 'update'])->name('update');
+            Route::delete('/{id}', [ObatController::class, 'destroy'])->name('destroy');
+        });
+        
+        // Legacy obat routes (for backward compatibility)
         Route::get('/obat', function () {
-            return view('admin.obat.index');
+            return redirect()->route('admin.drugs.index');
         })->name('obat.index');
+        
+        Route::post('/obat', [ObatController::class, 'store'])->name('obat.store');
     });
     
     // Apoteker routes

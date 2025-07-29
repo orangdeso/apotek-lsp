@@ -270,20 +270,20 @@
                         <span class="menu-header-text">Inventory Management</span>
                     </li>
                     
-                    <li class="menu-item {{ request()->routeIs('admin.obat.*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('admin.drugs.*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base ri ri-capsule-line"></i>
                             <div class="text-truncate" data-i18n="Drug Management">Drug Management</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->routeIs('admin.obat.index') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
+                            <li class="menu-item {{ request()->routeIs('admin.drugs.index') ? 'active' : '' }}">
+                                <a href="{{ route('admin.drugs.index') }}" class="menu-link">
                                     <div class="text-truncate" data-i18n="All Drugs">All Drugs</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->routeIs('admin.obat.create') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Add Drug">Add Drug</div>
+                            <li class="menu-item {{ request()->routeIs('admin.drugs.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.drugs.create') }}" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Create Drug">Create Drug</div>
                                 </a>
                             </li>
                         </ul>
