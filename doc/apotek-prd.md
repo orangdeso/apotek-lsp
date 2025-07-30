@@ -250,6 +250,7 @@ Sidebar admin dirancang dengan pengelompokan menu yang logis dan user-friendly:
 
 **INVENTORY MANAGEMENT**
 - Drug Management (CRUD obat - tambah, edit, hapus obat)
+- Supplier Management (CRUD data supplier)
 - Stock Levels (monitoring stok obat real-time)
 - Expiry Alerts (peringatan obat kadaluarsa)
 

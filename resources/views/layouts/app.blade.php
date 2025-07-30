@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>@yield('title', 'Dashboard') - LSP Apotek</title>
     <meta name="description" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('template-bootstrap/img/favicon/favicon.ico') }}" />
@@ -58,11 +59,11 @@
         
         /* Sub-menu active state */
         .menu-sub .menu-item.active > .menu-link {
-            background: rgba(105, 108, 255, 0.12) !important;
+            background: transparent !important;
             color: #696cff !important;
             border-radius: 0.375rem;
             margin: 0.125rem 0.5rem;
-            padding: 0.5rem 0.75rem;
+            padding: 0.5rem 0.75rem 0.5rem 1.75rem;
             font-weight: 500;
             position: relative;
             box-shadow: none;
@@ -71,15 +72,7 @@
         }
         
         .menu-sub .menu-item.active > .menu-link::before {
-            content: '';
-            position: absolute;
-            left: -0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0.25rem;
-            height: 1.25rem;
             background: #696cff;
-            border-radius: 0 0.125rem 0.125rem 0;
         }
         
         .menu-sub .menu-item.active > .menu-link .text-truncate {
@@ -102,7 +95,11 @@
             color: #696cff;
             border-radius: 0.375rem;
             margin: 0.125rem 0.5rem;
-            padding: 0.5rem 0.75rem;
+            padding: 0.5rem 0.75rem 0.5rem 1.75rem;
+        }
+        
+        .menu-sub .menu-item:not(.active) > .menu-link:hover::before {
+            background: #696cff;
         }
         
         .menu-item:not(.active) > .menu-link:hover .menu-icon {
@@ -122,10 +119,23 @@
         
         .menu-sub .menu-item > .menu-link {
             margin: 0.125rem 0.5rem;
-            padding: 0.5rem 0.75rem;
+            padding: 0.5rem 0.75rem 0.5rem 1.75rem;
             border-radius: 0.375rem;
             display: flex;
             align-items: center;
+            position: relative;
+        }
+        
+        .menu-sub .menu-link::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0.375rem;
+            height: 0.375rem;
+            border-radius: 50%;
+            background: #a1acb8;
         }
         
         /* Icon spacing fix */
@@ -289,19 +299,19 @@
                         </ul>
                     </li>
                     
-                    <li class="menu-item {{ request()->routeIs('admin.supplier.*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('admin.suppliers.*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base ri ri-building-2-line"></i>
                             <div class="text-truncate" data-i18n="Supplier Management">Supplier Management</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->routeIs('admin.supplier.index') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
+                            <li class="menu-item {{ request()->routeIs('admin.suppliers.index') ? 'active' : '' }}">
+                                <a href="{{ route('admin.suppliers.index') }}" class="menu-link">
                                     <div class="text-truncate" data-i18n="All Suppliers">All Suppliers</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->routeIs('admin.supplier.create') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
+                            <li class="menu-item {{ request()->routeIs('admin.suppliers.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.suppliers.create') }}" class="menu-link">
                                     <div class="text-truncate" data-i18n="Add Supplier">Add Supplier</div>
                                 </a>
                             </li>
@@ -370,25 +380,38 @@
                         <span class="menu-header-text">User Management</span>
                     </li>
                     
-                    <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('admin.pharmacists.*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base ri ri-group-line"></i>
-                            <div class="text-truncate" data-i18n="Users">Users</div>
+                            <div class="text-truncate" data-i18n="Pharmacist Management">Pharmacist Management</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
-                                    <div class="text-truncate" data-i18n="All Users">All Users</div>
+                            <li class="menu-item {{ request()->routeIs('admin.pharmacists.index') ? 'active' : '' }}">
+                                <a href="{{ route('admin.pharmacists.index') }}" class="menu-link">
+                                    <div class="text-truncate" data-i18n="All Pharmacists">All Pharmacists</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->routeIs('admin.users.apoteker') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Pharmacists">Pharmacists</div>
+                            <li class="menu-item {{ request()->routeIs('admin.pharmacists.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.pharmacists.create') }}" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Add Pharmacist">Add Pharmacist</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->routeIs('admin.users.pelanggan') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Customers">Customers</div>
+                        </ul>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('admin.customers.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base ri ri-group-line"></i>
+                            <div class="text-truncate" data-i18n="Customer Management">Customer Management</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('admin.customers.index') ? 'active' : '' }}">
+                                <a href="{{ route('admin.customers.index') }}" class="menu-link">
+                                    <div class="text-truncate" data-i18n="All Customers">All Customers</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->routeIs('admin.customers.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.customers.create') }}" class="menu-link">
+                                    <div class="text-truncate" data-i18n="Add Customer">Add Customer</div>
                                 </a>
                             </li>
                         </ul>
@@ -399,28 +422,23 @@
                         <span class="menu-header-text">Reports & Analytics</span>
                     </li>
                     
-                    <li class="menu-item {{ request()->routeIs('admin.reports.*') ? 'active open' : '' }}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <li class="menu-item {{ request()->routeIs('admin.reports.sales') ? 'active' : '' }}">
+                        <a href="#" class="menu-link">
                             <i class="menu-icon icon-base ri ri-bar-chart-2-line"></i>
-                            <div class="text-truncate" data-i18n="Reports">Reports</div>
+                            <div class="text-truncate" data-i18n="Sales Report">Sales Report</div>
                         </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item {{ request()->routeIs('admin.reports.sales') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Sales Report">Sales Report</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('admin.reports.inventory') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Inventory Report">Inventory Report</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('admin.reports.financial') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Financial Report">Financial Report</div>
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('admin.reports.inventory') ? 'active' : '' }}">
+                        <a href="#" class="menu-link">
+                            <i class="menu-icon icon-base ri ri-bar-chart-2-line"></i>
+                            <div class="text-truncate" data-i18n="Inventory Report">Inventory Report</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('admin.reports.financial') ? 'active' : '' }}">
+                        <a href="#" class="menu-link">
+                            <i class="menu-icon icon-base ri ri-bar-chart-2-line"></i>
+                            <div class="text-truncate" data-i18n="Financial Report">Financial Report</div>
+                        </a>
                     </li>
                     
                     <!-- Account -->

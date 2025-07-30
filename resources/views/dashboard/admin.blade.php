@@ -385,7 +385,7 @@
             </div>
             <div class="card-body">
                 <div class="d-grid gap-3">
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-primary d-flex align-items-center">
+                    <a href="{{ route('admin.pharmacists.index') }}" class="btn btn-primary d-flex align-items-center">
                         <i class="bx bx-user me-2"></i>
                         <div class="text-start">
                             <div class="fw-medium">Kelola Pengguna</div>
