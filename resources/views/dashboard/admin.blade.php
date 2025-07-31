@@ -74,7 +74,7 @@
             <div class="d-flex align-items-end row">
                 <div class="col-sm-7">
                     <div class="card-body">
-                        <h5 class="card-title text-white mb-3">Selamat Datang, Admin! 👨‍💼</h5>
+                        <h5 class="card-title text-white mb-3">Welcome, Admin! 👨‍💼</h5>
                         <p class="mb-4 text-white-50">
                             Panel administrasi untuk mengelola seluruh sistem apotek. Kelola pengguna, supplier, inventori, dan transaksi dengan mudah.
                         </p>

@@ -52,7 +52,7 @@
             flex-shrink: 0;
         }
         
-        .menu-item.active > .menu-link .text-truncate {
+        .menu-item.active > .menu-link div:not(.badge):not(.menu-icon) {
             color: #ffffff !important;
             flex: 1;
         }
@@ -75,7 +75,7 @@
             background: #696cff;
         }
         
-        .menu-sub .menu-item.active > .menu-link .text-truncate {
+        .menu-sub .menu-item.active > .menu-link div:not(.badge):not(.menu-icon) {
             color: #696cff !important;
             flex: 1;
         }
@@ -337,19 +337,19 @@
                         <span class="menu-header-text">Transaction Management</span>
                     </li>
                     
-                    <li class="menu-item {{ request()->routeIs('admin.penjualan.*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('admin.sales.*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base ri ri-shopping-cart-line"></i>
                             <div class="text-truncate" data-i18n="Sales Management">Sales Management</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->routeIs('admin.penjualan.index') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
+                            <li class="menu-item {{ request()->routeIs('admin.sales.index') ? 'active' : '' }}">
+                                <a href="{{ route('admin.sales.index') }}" class="menu-link">
                                     <div class="text-truncate" data-i18n="All Sales">All Sales</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->routeIs('admin.penjualan.create') ? 'active' : '' }}">
-                                <a href="#" class="menu-link">
+                            <li class="menu-item {{ request()->routeIs('admin.sales.create') ? 'active' : '' }}">
+                                <a href="{{ route('admin.sales.create') }}" class="menu-link">
                                     <div class="text-truncate" data-i18n="New Sale">New Sale</div>
                                 </a>
                             </li>
@@ -580,6 +580,9 @@
     
     <!-- Main JS -->
     <script src="{{ asset('template-bootstrap/js/main.js') }}"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- Page JS -->
     @yield('scripts')

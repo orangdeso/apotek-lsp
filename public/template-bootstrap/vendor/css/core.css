@@ -23514,9 +23514,9 @@ body {
   visibility: visible;
 }
 
-/* IE Fixes
+/* Forced Colors Mode Fixes
 ******************************************************************************* */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+@media (forced-colors: active) {
   /* Fix IE parent container height bug when containing image with fluid width */
   .card,
   .card-body,
@@ -24870,8 +24870,8 @@ body:not(.modal-open) .layout-content-navbar .layout-navbar {
     transition-property: margin-inline-start, margin-inline-end, inline-size;
   }
 }
-/* Disable transitions/animations in IE 10-11 */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+/* Disable transitions/animations in forced colors mode */
+@media (forced-colors: active) {
   .menu,
   .layout-menu,
   .layout-page,

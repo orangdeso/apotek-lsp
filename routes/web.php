@@ -7,6 +7,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Customer\TransactionController;
 use App\Http\Controllers\Customer\AddressController;
 use App\Http\Controllers\ObatController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PharmacistController;
+use App\Http\Controllers\CustomerManagementController;
 
 // URL awal - redirect berdasarkan authentication status
 Route::get('/', function () {
@@ -55,14 +58,43 @@ Route::middleware(['auth'])->group(function () {
             return view('dashboard.admin');
         })->name('dashboard');
         
-        // CRUD routes untuk admin
-        Route::get('/users', function () {
-            return view('admin.users.index');
-        })->name('users.index');
+        // Pharmacist Management Routes
+        Route::prefix('pharmacists')->name('pharmacists.')->group(function () {
+            Route::get('/', [PharmacistController::class, 'index'])->name('index');
+            Route::get('/create', [PharmacistController::class, 'create'])->name('create');
+            Route::post('/', [PharmacistController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [PharmacistController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [PharmacistController::class, 'update'])->name('update');
+            Route::delete('/{id}', [PharmacistController::class, 'destroy'])->name('destroy');
+        });
         
-        Route::get('/suppliers', function () {
-            return view('admin.suppliers.index');
-        })->name('suppliers.index');
+        // Customer Management Routes
+        Route::prefix('customers')->name('customers.')->group(function () {
+            Route::get('/', [CustomerManagementController::class, 'index'])->name('index');
+            Route::get('/create', [CustomerManagementController::class, 'create'])->name('create');
+            Route::post('/', [CustomerManagementController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [CustomerManagementController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [CustomerManagementController::class, 'update'])->name('update');
+            Route::delete('/{id}', [CustomerManagementController::class, 'destroy'])->name('destroy');
+        });
+        
+        // Legacy users route (for backward compatibility)
+         Route::get('/users', function () {
+             return redirect()->route('admin.pharmacists.index');
+         })->name('users.index');
+         Route::get('/users/create', function () {
+             return redirect()->route('admin.pharmacists.create');
+         })->name('users.create');
+        
+        // Supplier Management Routes
+        Route::prefix('suppliers')->name('suppliers.')->group(function () {
+            Route::get('/', [SupplierController::class, 'index'])->name('index');
+            Route::get('/create', [SupplierController::class, 'create'])->name('create');
+            Route::post('/', [SupplierController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [SupplierController::class, 'update'])->name('update');
+            Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('destroy');
+        });
         
         // Drug Management Routes
         Route::prefix('drugs')->name('drugs.')->group(function () {
@@ -80,6 +112,16 @@ Route::middleware(['auth'])->group(function () {
         })->name('obat.index');
         
         Route::post('/obat', [ObatController::class, 'store'])->name('obat.store');
+        
+        // Sales Management Routes
+        Route::prefix('sales')->name('sales.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\SalesController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\Admin\SalesController::class, 'create'])->name('create');
+            Route::get('/search-products', [\App\Http\Controllers\Admin\SalesController::class, 'searchProducts'])->name('search.products');
+            Route::get('/obat/{id}/details', [\App\Http\Controllers\Admin\SalesController::class, 'getObatDetails'])->name('obat.details');
+            Route::post('/', [\App\Http\Controllers\Admin\SalesController::class, 'store'])->name('store');
+            Route::get('/{id}', [\App\Http\Controllers\Admin\SalesController::class, 'show'])->name('show');
+        });
     });
     
     // Apoteker routes
